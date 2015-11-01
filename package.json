@@ -1,6 +1,6 @@
 {
   "name": "jasper-build",
-  "version": "0.1.15",
+  "version": "0.1.18",
   "description": "Builder for jasper application.",
   "homepage": "https://github.com/jasperjs/jasper-build",
   "repository": "https://github.com/jasperjs/jasper-buildr",

@@ -71,7 +71,7 @@ declare module "jasper-build" {
 
     packageProject():void;
 
-    rebuildArea(areaName:string, rebuildRoutes:boolean = true);
+    rebuildArea(areaName:string, rebuildRoutes?:boolean);
 
     updateConfig(buildConfig:IJasperBuildConfig);
 
