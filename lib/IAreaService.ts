@@ -11,7 +11,7 @@ export interface IAreaService {
    * Builds _init.js file in area folder
    * @param areaName
    */
-  buildArea(areaName:string, structure:structure.IProjectStructure);
+  buildArea(area:structure.IAreaDefinition);
 
   /**
    * Build _init.js for all areas found in projet
@@ -31,19 +31,9 @@ export class AreaService implements IAreaService {
 
   }
 
-  buildArea(areaName:string, structure:structure.IProjectStructure) {
-    var area = this.getAreaByName(areaName, structure);
-    if (!area) {
-      throw 'Area with name "' + area + '" not found';
-    }
-
-    this.buildInitJsArea(area);
-
-  }
-
   buildAllAreas(structure:structure.IProjectStructure) {
     structure.areas.forEach(area=> {
-      this.buildInitJsArea(area);
+      this.buildArea(area);
     });
   }
 
@@ -51,7 +41,7 @@ export class AreaService implements IAreaService {
     return '';
   }
 
-  private buildInitJsArea(area:structure.IAreaDefinition) {
+  buildArea(area:structure.IAreaDefinition) {
     var defScript = '';
     area.__definitions.forEach((def) => {
       defScript += this.getRegistrationScript(def);
@@ -64,7 +54,6 @@ export class AreaService implements IAreaService {
     this.fileUtils.writeFile(initFilePath, areaScript);
 
     area.scripts.push(utils.convertPathClient(initFilePath));
-
   }
 
   private getRegistrationScript(def:structure.IProjectDefinition) {
@@ -87,7 +76,7 @@ export class AreaService implements IAreaService {
         result = this.templateRegistration(def.url, def.content);
         break;
       case "PAGE":
-        var pageTemplateUrl = def.templateUrl = `#_page_${def.name}`;
+        var pageTemplateUrl = `#_page_${def.name}`;
         var tagName = utils.shakeCase(def.name);
         var pageTemplate = `<${tagName}></${tagName}>`;
         // register page template and the page component

@@ -149,7 +149,9 @@ export class RoutesConfig {
 
   toClientConfigScript(): string{
     var config = {};
-    this.pages.forEach(page=>{
+    var copyPages = JSON.parse(JSON.stringify(this.pages));
+    copyPages.forEach(page=>{
+      page.templateUrl = `#_page_${page.name}`;
       config[page.route] = page;
       delete page.__type;
     });

@@ -1,0 +1,10 @@
+export declare function setUp(done: Function): void;
+export declare function testInitAreasScriptCreation(test: nodeunit.Test): void;
+export declare function testAppConfigCreation(test: nodeunit.Test): void;
+export declare function testAreasConfig(test: nodeunit.Test): void;
+export declare function testAreasInitFiles(test: nodeunit.Test): void;
+export declare function testRoutesConfig(test: nodeunit.Test): void;
+export declare function testValuesConfig(test: nodeunit.Test): void;
+export declare function testIndexPageScripts(test: nodeunit.Test): void;
+export declare function testIndexPageStyles(test: nodeunit.Test): void;
+export declare function testRebuildArea(test: nodeunit.Test): void;

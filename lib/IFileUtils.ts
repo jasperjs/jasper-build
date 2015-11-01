@@ -22,8 +22,8 @@ export interface IFileUtils {
 
 export class DefaultFileUtils implements IFileUtils {
 
-  constructor(private cwd?: string) {
-    if(!this.cwd){
+  constructor(private cwd?:string) {
+    if (!this.cwd) {
       this.cwd = process.cwd();
     }
   }
@@ -49,8 +49,8 @@ export class DefaultFileUtils implements IFileUtils {
 
   writeFile(filename:string, data:string) {
     var directoryPath = path.dirname(filename);
-    if (!this.dirExists(directoryPath)){
-      fs.mkdirSync(directoryPath);
+    if (!this.dirExists(directoryPath)) {
+      this.mkDirRecursive(directoryPath);
     }
     return fs.writeFileSync(filename, data, {encoding: 'utf8'});
   }
@@ -75,17 +75,37 @@ export class DefaultFileUtils implements IFileUtils {
       if (!this.fileExists(filename)) {
         throw `File "${filename}" does not exists`;
       }
-      buffer += this.readFile(filename);
+      buffer += '\n' + this.readFile(filename);
     });
     return buffer;
   }
 
-  private dirExists(folderpath: string): boolean{
+  private dirExists(folderpath:string):boolean {
     try {
       return fs.statSync(folderpath).isDirectory();
     }
     catch (err) {
       return false;
     }
+  }
+
+  private mkDirRecursive(dirPath:string, mode?:string) {
+
+
+    //Call the standard fs.mkdir
+    try {
+      fs.mkdirSync(dirPath, mode);
+    }
+    catch (error) {
+      //When it fail in this way, do the custom steps
+      if (error && error.code === 'ENOENT') {
+        //Create all the parents recursively
+        this.mkDirRecursive(path.dirname(dirPath), mode);
+        //And then the directory
+        this.mkDirRecursive(dirPath, mode);
+      }
+    }
+
+
   }
 }

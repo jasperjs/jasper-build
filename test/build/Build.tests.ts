@@ -107,8 +107,9 @@ export function testAreasInitFiles(test:nodeunit.Test){
     'jsp.component({"ctrl":spa.core.components.SiteHeader,"properties":["myAttr"],"events":["click"],"name":"siteHeader","templateUrl":"test/testApp/app/core/components/site-header/site-header.html","jDebug":{"folder":',
     'jsp.component({"route":"/","ctrl":spa.core.pages.HomePage',
     'jsp.decorator({"ctrl":spa.core.decorators.FocusOnDefault,"name":"focusOnDefault","jDebug":{"folder":',
-    'jsp.template(\'template\',\'<p>custom template</p>\');'
-];
+    'jsp.template(\'template\',\'<p>custom template</p>\');',
+    '"test/testApp/app/core/pages/home-page/home-page.html"'
+  ];
 
   ensurePartsExistence(test, areaInitContent, contentParts);
 
@@ -189,6 +190,11 @@ export function testIndexPageStyles(test:nodeunit.Test) {
   test.done();
 }
 
+export function testRebuildArea(test:nodeunit.Test) {
+  buildManager.rebuildArea('boot');
+  // todo clean and expect _init file creation
+  test.done();
+}
 
 /* helper funcs */
 

@@ -31,7 +31,7 @@ module.exports = function (grunt) {
           module: 'commonjs', //or commonjs
           target: 'es5', //or es3
           sourceMap: false,
-          declaration: false,
+          declaration: true,
           references: [ 'typed/**/*.d.ts'],
           generateTsConfig: true
         },

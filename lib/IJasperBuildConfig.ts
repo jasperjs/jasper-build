@@ -12,11 +12,6 @@ export interface IJasperBuildConfig {
 
   singlePage: string;
 
-  /**
-   * Name of the build process
-   */
-  buildName: string;
-
   appPath: string;
 
   defaultRoutePath: string;

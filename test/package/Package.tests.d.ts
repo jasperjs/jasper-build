@@ -1,0 +1,11 @@
+export declare function setUp(done: Function): void;
+export declare function testStylesCreation(test: nodeunit.Test): void;
+export declare function testScriptsCreation(test: nodeunit.Test): void;
+export declare function testCorrectScriptCreation(test: nodeunit.Test): void;
+export declare function testCorrectStartupScript(test: nodeunit.Test): void;
+export declare function testHtmlCommentRemoving(test: nodeunit.Test): void;
+export declare function testAreaInitScriptsInAreaFiles(test: nodeunit.Test): void;
+export declare function testEpcapingSlash(test: nodeunit.Test): void;
+export declare function testCorePackagedAreaMustContainsExternalScript(test: nodeunit.Test): void;
+export declare function testPackageAreasContainsTemplates(test: nodeunit.Test): void;
+export declare function testIndexPageReferences(test: nodeunit.Test): void;

@@ -5,7 +5,6 @@ import path = require('path');
 export class SinglePagePatch {
 
   constructor(private fileUtils:file.IFileUtils) {
-
   }
 
   applyPatch(singlePagePath:string, baseHref: string, scripts:string[], styles:string[]) {

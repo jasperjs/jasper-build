@@ -14,8 +14,12 @@ export class BuildManager {
   private packageBuilder:p.PackageBuilder;
   private areasSvc:areas.AreaService;
 
+  private structure:struct.IProjectStructure;
+
   constructor(private buildConfig:config.IJasperBuildConfig,
               private root:composition.ICompositionRoot = new composition.JasperCompositionRoot()) {
+
+    this.validateConfig(buildConfig);
 
     this.projectStructureBuilder = new builder.ProjectStructureBuilder(
       this.root.fileUtils,
@@ -33,35 +37,67 @@ export class BuildManager {
 
   }
 
+  updateConfig(buildConfig:config.IJasperBuildConfig) {
+    this.buildConfig = buildConfig;
+  }
+
   buildProject() {
     this.root.logger.info('Building jasper application...');
 
     this.buildConfig.package = false;
-    var structure = this.projectStructureBuilder.buildStructure();
+    this.ensureStructure();
     // build _init.js file of all areas
-    this.areasSvc.buildAllAreas(structure);
+    this.areasSvc.buildAllAreas(this.structure);
 
     //_areas.js
-    var areaConfigPath = this.buildAreasConfig(structure);
+    var areaConfigPath = this.buildAreasConfig(this.structure);
     //_routes.js
-    var routesConfigPath = this.buildRoutesConfig(structure);
+    var routesConfigPath = this.buildRoutesConfig(this.structure);
     //_values.js
     var valuesConfigPath:string = null;
-    if (structure.values) {
-      valuesConfigPath = this.buildValuesConfig(structure);
+    if (this.structure.values) {
+      valuesConfigPath = this.buildValuesConfig(this.structure);
     }
 
-    this.patchSinglePage(structure, areaConfigPath, routesConfigPath, valuesConfigPath);
+    this.patchSinglePage(this.structure, areaConfigPath, routesConfigPath, valuesConfigPath);
     this.root.logger.info('Build success.');
   }
 
   packageProject() {
     this.buildConfig.package = true;
-    var structure = this.projectStructureBuilder.buildStructure();
+    this.ensureStructure();
 
-    this.areasSvc.buildAllAreas(structure);
+    this.areasSvc.buildAllAreas(this.structure);
 
-    this.packageBuilder.packageApp(structure);
+    this.packageBuilder.packageApp(this.structure);
+  }
+
+  rebuildArea(areaName:string, rebuildRoutes:boolean = true) {
+    this.root.logger.info(`Rebuilding area '${areaName}'...`);
+    this.ensureStructure();
+    var area = this.projectStructureBuilder.buildArea(areaName);
+    // update area def
+    for (var i = 0; i < this.structure.areas.length; i++) {
+      if (this.structure.areas[i].name === areaName) {
+        this.structure.areas[i] = area;
+        break;
+      }
+    }
+    this.buildAreasConfig(this.structure);
+    if (rebuildRoutes) {
+      this.buildRoutesConfig(this.structure);
+    }
+    this.root.logger.info(`Success.'`);
+  }
+
+  static createDefaultConfig():config.IJasperBuildConfig {
+    return new config.DefaultBuildConfig();
+  }
+
+  private ensureStructure() {
+    if (!this.structure) {
+      this.structure = this.projectStructureBuilder.buildStructure();
+    }
   }
 
   private buildRoutesConfig(structure:struct.IProjectStructure):string {
@@ -104,7 +140,7 @@ export class BuildManager {
 
     // search all app styles, first determined in config
     var styles = [];
-    structure.cssTargets.forEach(target=>{
+    structure.cssTargets.forEach(target=> {
       styles = styles.concat(target.files);
     });
     // then append all areas styles
@@ -120,6 +156,22 @@ export class BuildManager {
 
     // override
     this.root.fileUtils.writeFile(this.buildConfig.singlePage, content);
+  }
+
+  private validateConfig(buildConfig:config.IJasperBuildConfig) {
+
+    var requiredProperties = [
+      'appPath', 'singlePage'
+    ];
+    requiredProperties.forEach(prop=> {
+      if (!buildConfig[prop]) {
+        throw "Specify '" + prop + "' option.";
+      }
+    });
+
+    if (!buildConfig.baseHref) {
+      buildConfig.baseHref = '';
+    }
   }
 
 }
