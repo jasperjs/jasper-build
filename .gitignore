@@ -1,0 +1,12 @@
+node_modules
+npm-debug.log
+tmp
+Thumbs.db
+
+.idea
+tsconfig.json
+lib/**/*.js
+Index.js
+
+test/testApp/dist
+test/**/*.tests.js
