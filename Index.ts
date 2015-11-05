@@ -45,7 +45,7 @@ export class BuildManager {
     this.root.logger.info('Building jasper application...');
 
     this.buildConfig.package = false;
-    this.ensureStructure();
+    this.createStructure(false);
     // build _init.js file of all areas
     this.areasSvc.buildAllAreas(this.structure);
 
@@ -65,7 +65,7 @@ export class BuildManager {
 
   packageProject() {
     this.buildConfig.package = true;
-    this.ensureStructure();
+    this.createStructure(false);
 
     this.areasSvc.buildAllAreas(this.structure);
 
@@ -74,8 +74,10 @@ export class BuildManager {
 
   rebuildArea(areaName:string, rebuildRoutes:boolean = true) {
     this.root.logger.info(`Rebuilding area '${areaName}'...`);
-    this.ensureStructure();
+    this.createStructure(true);
     var area = this.projectStructureBuilder.buildArea(areaName);
+    //build _init.js file
+    this.areasSvc.buildArea(area);
     // update area def
     for (var i = 0; i < this.structure.areas.length; i++) {
       if (this.structure.areas[i].name === areaName) {
@@ -83,32 +85,38 @@ export class BuildManager {
         break;
       }
     }
-    this.buildAreasConfig(this.structure);
-    if (rebuildRoutes) {
-      this.buildRoutesConfig(this.structure);
-    }
     this.root.logger.info(`Success.'`);
+  }
+
+  rebuildProjectClientConfig() {
+    this.createStructure(false);
+
+    this.buildAreasConfig(this.structure);
+    this.buildRoutesConfig(this.structure);
+    if (this.structure.values) {
+      this.buildValuesConfig(this.structure);
+    }
   }
 
   static createDefaultConfig():config.IJasperBuildConfig {
     return new config.DefaultBuildConfig();
   }
 
-  private ensureStructure() {
-    if (!this.structure) {
+  private createStructure(userCache:boolean) {
+    if (!this.structure || !userCache) {
       this.structure = this.projectStructureBuilder.buildStructure();
     }
   }
 
   private buildRoutesConfig(structure:struct.IProjectStructure):string {
-    var routeScript = structure.routes.toClientConfigScript()
+    var routeScript = structure.routes.toClientConfigScript();
     var routeConfigPath = path.join(this.buildConfig.appPath, '_routes.js');
     this.root.fileUtils.writeFile(routeConfigPath, routeScript);
     return routeConfigPath;
   }
 
   private buildValuesConfig(structure:struct.IProjectStructure):string {
-    var valuesScript = structure.values.toClientConfigScript()
+    var valuesScript = structure.values.toClientConfigScript();
     var valuesConfigPath = path.join(this.buildConfig.appPath, '_values.js');
     this.root.fileUtils.writeFile(valuesConfigPath, valuesScript);
     return valuesConfigPath;

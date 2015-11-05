@@ -2,7 +2,7 @@
  * Type definition for external modules
  */
 
-declare var a:any;
+
 declare module "jasper-build" {
 
   export interface IJasperBuildConfig {
@@ -10,7 +10,7 @@ declare module "jasper-build" {
     /**
      * Is package build?
      */
-      package: boolean;
+    package: boolean;
 
     packageOutput: string;
 
@@ -75,8 +75,9 @@ declare module "jasper-build" {
 
     updateConfig(buildConfig:IJasperBuildConfig);
 
+    rebuildProjectClientConfig();
+
     static createDefaultConfig():IJasperBuildConfig;
   }
-
 
 }

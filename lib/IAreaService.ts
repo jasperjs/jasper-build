@@ -91,7 +91,7 @@ export class AreaService implements IAreaService {
   }
 
   private getAreaByName(name:string, structure:structure.IProjectStructure):structure.IAreaDefinition {
-    return structure.areas['find'](a => a.name === name);
+    return structure.areas.filter(a => a.name === name)[0];
   }
 
   private componentRegistration(component:structure.IProjectDefinition) {

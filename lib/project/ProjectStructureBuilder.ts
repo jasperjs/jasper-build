@@ -33,7 +33,7 @@ export class ProjectStructureBuilder implements IProjectStructureBuilder {
   }
 
   buildArea(areaName:string):project.IAreaDefinition {
-    var area = this.getAreaRefs()['find'](area=>area.name == areaName);
+    var area = this.getAreaRefs().filter(area=>area.name === areaName)[0];
     if(!area){
       throw `Area with name '${areaName}' not found in the project`;
     }

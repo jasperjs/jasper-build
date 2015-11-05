@@ -61,11 +61,6 @@ export class DefaultBuildConfig implements IJasperBuildConfig {
 
   values: string = null;
 
-  /**
-   * Name of the build process
-   */
-  buildName: string;
-
   appPath: string = 'app';
 
   defaultRoutePath: string = '/';

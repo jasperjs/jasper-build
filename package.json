@@ -1,6 +1,6 @@
 {
   "name": "jasper-build",
-  "version": "0.1.18",
+  "version": "0.1.32",
   "description": "Builder for jasper application.",
   "homepage": "https://github.com/jasperjs/jasper-build",
   "repository": "https://github.com/jasperjs/jasper-buildr",
@@ -12,7 +12,7 @@
   "keywords": [
     "jasperjs"
   ],
-  "main": "gruntfile.js",
+  "main": "Index.js",
   "engines": {
     "node": ">= 0.8.0"
   },

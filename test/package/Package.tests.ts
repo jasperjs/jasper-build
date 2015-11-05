@@ -28,8 +28,6 @@ var buildManager = new build.BuildManager(buildConfig);
 buildManager.packageProject();
 
 export function setUp(done:Function) {
-
-
   done();
 }
 
@@ -132,12 +130,12 @@ export function testPackageAreasContainsTemplates(test: nodeunit.Test){
 
 export function testIndexPageReferences(test: nodeunit.Test){
   //styles
-  expectFileContent(test, 'index.html', '<link rel="stylesheet" href="/rootpath/test/testApp/dist/styles/bootstrap.min.css"/>');
-  expectFileContent(test, 'index.html', '<link rel="stylesheet" href="/rootpath/test/testApp/dist/styles/all.min.css"/>');
+  expectFileContent(test, 'index.html', '<link rel="stylesheet" href="/rootpath/styles/bootstrap.min.css"/>');
+  expectFileContent(test, 'index.html', '<link rel="stylesheet" href="/rootpath/styles/all.min.css"/>');
 
   //scripts
-  expectFileContent(test, 'index.html', '<script src="/rootpath/test/testApp/dist/scripts/_base');
-  expectFileContent(test, 'index.html', '<script src="/rootpath/test/testApp/dist/scripts/_startup');
+  expectFileContent(test, 'index.html', '<script src="/rootpath/scripts/_base');
+  expectFileContent(test, 'index.html', '<script src="/rootpath/scripts/_startup');
 
   test.done();
 }

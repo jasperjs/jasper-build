@@ -54,7 +54,7 @@ export class PackageBuilder implements IPackageBuilder {
     var destMin = path.join(this.jasperConfig.packageOutput, this.scriptsFolder, filename);
     this.scriptsMinifier.minify(baseScriptContent, destMin);
 
-    return destMin;
+    return path.join(this.scriptsFolder, filename);
   }
 
   private buildStartupScript(structure:project.IProjectStructure, areasConfig:project.AreasClientOptions):string {
@@ -75,7 +75,7 @@ export class PackageBuilder implements IPackageBuilder {
     var filename = '_startup.' + (this.jasperConfig.fileVersion ? this.getFileVersion(startupScriptContent) + '.' : '') + 'min.js';
     var destMin = path.join(this.jasperConfig.packageOutput, this.scriptsFolder, filename);
     this.scriptsMinifier.minify(startupScriptContent, destMin);
-    return destMin;
+    return path.join(this.scriptsFolder, filename);
   }
 
   /**
@@ -102,7 +102,7 @@ export class PackageBuilder implements IPackageBuilder {
       this.cssMinifier.minifyCss(target.files, cssPath);
       this.logger.info(`Styles created at '${cssPath}'`);
 
-      result.push(cssPath);
+      result.push(path.join('styles', target.filename));
     });
     return result;
   }
